@@ -1,0 +1,81 @@
+package Main;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class Main extends JFrame implements ActionListener {
+    JTextField sizeField;
+    JTextArea outputArea;
+    JButton seriesButton, answerButton;
+    int[] arr;
+    public Main() {
+        setTitle("Smart Series Generator");
+        setSize(650,400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        JPanel panel = new JPanel(new BorderLayout(10,10));
+        JPanel top = new JPanel();
+        JLabel label = new JLabel("Enter Array Size:");
+        sizeField = new JTextField(5);
+        seriesButton = new JButton("Generate Series");
+        answerButton = new JButton("Show Answer");
+        seriesButton.addActionListener(this);
+        answerButton.addActionListener(this);
+        top.add(label);
+        top.add(sizeField);
+        top.add(seriesButton);
+        top.add(answerButton);
+        outputArea = new JTextArea();
+        outputArea.setEditable(false);
+        outputArea.setFont(new Font("Monospaced",Font.PLAIN,14));
+        JScrollPane scroll = new JScrollPane(outputArea);
+        panel.add(top,BorderLayout.NORTH);
+        panel.add(scroll,BorderLayout.CENTER);
+        add(panel);
+        setVisible(true);
+    }
+    public void actionPerformed(ActionEvent e) {
+        try {
+            int size = Integer.parseInt(sizeField.getText());
+            if(size < 3){
+                JOptionPane.showMessageDialog(this,"Enter size >= 3");
+                return;
+            }
+            if(e.getSource() == seriesButton){
+                arr = new int[size];
+                arr[0] = 1;
+                arr[1] = 1;
+                for(int i=2; i<size; i++){
+                    arr[i] = arr[i-1] + arr[i-2] + i;
+                }
+                StringBuilder sb = new StringBuilder();
+                sb.append("Series: ");
+                for(int n : arr){
+                    sb.append(n).append(" ");
+                }
+                outputArea.setText(sb.toString());
+            }
+            if(e.getSource() == answerButton){
+                if(arr == null){
+                    JOptionPane.showMessageDialog(this,"First generate the series!");
+                    return;
+                }
+                int i = arr.length;
+                int next = arr[i-1] + arr[i-2] + i;
+                StringBuilder sb = new StringBuilder();
+                sb.append("Series: ");
+                for(int n : arr){
+                    sb.append(n).append(" ");
+                }
+                sb.append("\n\nPattern: Fibonacci + Index Addition\n");
+                sb.append("Next Number: ").append(next);
+                outputArea.setText(sb.toString());
+            }
+
+        } catch(Exception ex){
+            JOptionPane.showMessageDialog(this,"Enter valid number");
+        }
+    }
+    public static void main(String[] args) {
+        new Main();
+    }
+}
