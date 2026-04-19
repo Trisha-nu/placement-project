@@ -1,0 +1,58 @@
+package Main;
+import javax.swing.*;
+import java.awt.event.*;
+public class Main extends JFrame implements ActionListener {
+    JTextField m1, m2, m3;
+    JButton calc;
+    JLabel result;
+    Main() {
+        setTitle("Marks Analyzer");
+        setSize(300, 250);
+        setLayout(null);
+        JLabel l1 = new JLabel("Subject 1:");
+        l1.setBounds(30, 20, 100, 20);
+        add(l1);
+        m1 = new JTextField();
+        m1.setBounds(120, 20, 100, 20);
+        add(m1);
+        JLabel l2 = new JLabel("Subject 2:");
+        l2.setBounds(30, 60, 100, 20);
+        add(l2);
+        m2 = new JTextField();
+        m2.setBounds(120, 60, 100, 20);
+        add(m2);
+        JLabel l3 = new JLabel("Subject 3:");
+        l3.setBounds(30, 100, 100, 20);
+        add(l3);
+        m3 = new JTextField();
+        m3.setBounds(120, 100, 100, 20);
+        add(m3);
+        calc = new JButton("Calculate");
+        calc.setBounds(80, 140, 120, 30);
+        add(calc);
+        result = new JLabel("");
+        result.setBounds(30, 180, 250, 20);
+        add(result);
+        calc.addActionListener(this);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+    public void actionPerformed(ActionEvent e) {
+        int a = Integer.parseInt(m1.getText());
+        int b = Integer.parseInt(m2.getText());
+        int c = Integer.parseInt(m3.getText());
+        int total = a + b + c;
+        double avg = total / 3.0;
+        String grade;
+        if (avg >= 80)
+            grade = "A";
+        else if (avg >= 60)
+            grade = "B";
+        else
+            grade = "C";
+        result.setText("Total: " + total + " Avg: " + avg + " Grade: " + grade);
+    }
+    public static void main(String[] args) {
+        new Main();
+    }
+}
