@@ -1,0 +1,142 @@
+package Main;
+import java.util.*;
+import java.io.*;
+class Student {
+    int id;
+    String name;
+    int marks;
+    Student next;
+    Student(int id, String name, int marks) {
+        this.id = id;
+        this.name = name;
+        this.marks = marks;
+        this.next = null;
+    }
+}
+public class Main {
+    static Student head = null;
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        do {
+            System.out.println("\n--- STUDENT MANAGEMENT ---");
+            System.out.println("1. Insert Student");
+            System.out.println("2. Delete Student");
+            System.out.println("3. Search by ID");
+            System.out.println("4. Sort by Marks");
+            System.out.println("5. Display");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+            switch (choice) {
+                case 1:
+                    insert(sc);
+                    break;
+                case 2:
+                    delete(sc);
+                    break;
+                case 3:
+                    search(sc);
+                    break;
+                case 4:
+                    sort();
+                    break;
+                case 5:
+                    display();
+                    break;
+                case 6:
+                    saveToFile();
+                    System.out.println("Saved to file. Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+            }
+        } while (choice != 6);
+    }
+    static void insert(Scanner sc) {
+        System.out.print("Enter ID: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Enter Name: ");
+        String name = sc.nextLine();
+        System.out.print("Enter Marks: ");
+        int marks = sc.nextInt();
+        Student newNode = new Student(id, name, marks);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Student temp = head;
+            while (temp.next != null) {
+                temp = temp.next;
+            }
+            temp.next = newNode;
+        }
+        System.out.println("Student Inserted!");
+    }
+    static void delete(Scanner sc) {
+        System.out.print("Enter ID to delete: ");
+        int id = sc.nextInt();
+        Student temp = head, prev = null;
+        while (temp != null) {
+            if (temp.id == id) {
+                if (prev == null) {
+                    head = temp.next;
+                } else {
+                    prev.next = temp.next;
+                }
+                System.out.println("Deleted!");
+                return;
+            }
+            prev = temp;
+            temp = temp.next;
+        }
+        System.out.println("Student not found");
+    }
+    static void search(Scanner sc) {
+        System.out.print("Enter ID to search: ");
+        int id = sc.nextInt();
+        Student temp = head;
+        while (temp != null) {
+            if (temp.id == id) {
+                System.out.println("Found: " + temp.name + " Marks: " + temp.marks);
+                return;
+            }
+            temp = temp.next;
+        }
+        System.out.println("Not found");
+    }
+    static void sort() {
+        for (Student i = head; i != null; i = i.next) {
+            for (Student j = i.next; j != null; j = j.next) {
+                if (i.marks > j.marks) {
+                    int tempMarks = i.marks;
+                    i.marks = j.marks;
+                    j.marks = tempMarks;
+                    int tempId = i.id;
+                    i.id = j.id;
+                    j.id = tempId;
+                    String tempName = i.name;
+                    i.name = j.name;
+                    j.name = tempName;
+                }
+            }
+        }
+        System.out.println("Sorted by Marks!");
+    }
+    static void display() {
+        Student temp = head;
+        while (temp != null) {
+            System.out.println(temp.id + " - " + temp.name + " - " + temp.marks);
+            temp = temp.next;
+        }
+    }
+    static void saveToFile() throws Exception {
+        FileWriter fw = new FileWriter("students.txt");
+        Student temp = head;
+        while (temp != null) {
+            fw.write(temp.id + "," + temp.name + "," + temp.marks + "\n");
+            temp = temp.next;
+        }
+        fw.close();
+    }
+}
